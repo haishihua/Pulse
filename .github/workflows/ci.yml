@@ -112,3 +112,20 @@ jobs:
           done
           echo "Version: $(defaults read "$PWD/$APP/Contents/Info.plist" CFBundleShortVersionString)"
           echo "Architectures: $(lipo -archs "$APP/Contents/MacOS/Pulse")"
+
+      # **The whole point of this fork's CI**: an app somebody can download and
+      # run, rather than a green tick. It rebuilds the release binary inside
+      # `bundle.sh --zip`, which costs a few minutes on top of the build above.
+      - name: Package Pulse.app
+        run: ./Scripts/bundle.sh --zip
+
+      # Ad-hoc signed, so the download is not notarized and Gatekeeper will
+      # refuse it until it is told otherwise: `xattr -cr /Applications/Pulse.app`,
+      # or Privacy & Security → "Open Anyway". See README → Installation.
+      - name: Upload the app
+        uses: actions/upload-artifact@v4
+        with:
+          name: Pulse-fork
+          path: build.noindex/Pulse-*.zip
+          if-no-files-found: error
+          retention-days: 30

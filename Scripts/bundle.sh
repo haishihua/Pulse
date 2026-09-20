@@ -23,8 +23,17 @@ cd "$(dirname "$0")/.."
 
 VERSION="$(tr -d '[:space:]' < VERSION)"
 APP="build.noindex/Pulse.app"
-BUNDLE_ID="io.github.qunqin24.Pulse"
-FEED_URL="https://raw.githubusercontent.com/qunqin24/Pulse/main/appcast.xml"
+# **The fork's own bundle identity.** Upstream's id would make this copy look
+# like a second installation of Pulse — same preferences domain, same Keychain
+# items, same login-item registration — and Sparkle compares the installed id
+# against an update's before installing it, so keeping it would let the stock
+# app be installed over this one, taking the gateway provider with it.
+BUNDLE_ID="io.github.haishihua.Pulse"
+# **Pointed at this fork, which publishes no appcast.** Upstream's feed is live
+# and its updates are signed by a key this build still trusts, so leaving the
+# URL alone would offer a stock Pulse as an upgrade and install it. A feed that
+# is not there fails quietly instead.
+FEED_URL="https://raw.githubusercontent.com/haishihua/Pulse/main/appcast.xml"
 # Public half of the EdDSA key updates are signed with. Safe to commit — it is
 # what *verifies* an update, and Sparkle refuses anything not signed by its
 # private half. See Scripts/appcast.py.
@@ -119,14 +128,15 @@ cat > "$APP/Contents/Info.plist" <<PLIST
         <key>CFBundleTypeRole</key><string>Viewer</string>
     </dict></array>
     <key>NSHighResolutionCapable</key><true/>
-    <key>NSHumanReadableCopyright</key><string>github.com/qunqin24/Pulse</string>
+    <key>NSHumanReadableCopyright</key><string>github.com/haishihua/Pulse (a fork of github.com/qunqin24/Pulse)</string>
     <key>SUFeedURL</key><string>$FEED_URL</string>
     <key>SUPublicEDKey</key><string>$PUBLIC_KEY</string>
-    <!-- Checked on a schedule without asking first. Sparkle would normally put
-         up a permission prompt, but Pulse is an .accessory app whose panel
-         never becomes key, so that window can open behind everything and go
-         unanswered. The toggle is in Settings instead, where it can be found. -->
-    <key>SUEnableAutomaticChecks</key><true/>
+    <!-- **Off here, and that is this fork's one deliberate change to
+         upstream's updater.** There is no appcast for this build to check —
+         see FEED_URL above — so a scheduled check could only ever invent a
+         failure to report. Upstream ships releases; this copy is built from a
+         fork, and updating it means running the workflow again. -->
+    <key>SUEnableAutomaticChecks</key><false/>
     <!-- Two hours, against Sparkle's default of one day. A day is sized for
          apps that ship every few months; this one ships fixes for things it
          is doing wrong right now, and a user burning a core on a bug that was

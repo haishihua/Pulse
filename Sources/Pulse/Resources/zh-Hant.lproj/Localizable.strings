@@ -310,6 +310,7 @@
 "Every two hours. Updates are offered, never installed on their own." = "每兩小時檢查一次。只會提示，不會自行安裝。";
 "Couldn't reach the update feed." = "連不上更新來源。";
 "Uses the key you entered." = "使用你填入的金鑰。";
+"Uses the access token you entered." = "使用你填入的存取權杖。";
 "API key" = "API 金鑰";
 "Session cookie" = "登入 Cookie";
 "Read from browser" = "從瀏覽器讀取";
@@ -611,12 +612,16 @@
 "Uses a browser session you import in Settings. Importing may ask for browser Keychain access." = "使用你在設定中匯入的瀏覽器登入工作階段。匯入時可能要求瀏覽器的鑰匙圈存取權限。";
 "Uses the GitHub login you connect in Settings. No Keychain prompt." = "使用你在設定中連結的 GitHub 登入。不會出現鑰匙圈提示。";
 "Uses only the API key you enter in Settings. No Keychain prompt." = "只使用你在設定中輸入的 API 金鑰。不會出現鑰匙圈提示。";
+"Uses the access token you enter in Settings. No Keychain prompt." = "只使用你在設定中輸入的存取權杖。不會出現鑰匙圈提示。";
 
 /* New API gateway */
 "Address" = "位址";
 "Spent so far" = "已花費";
 "Spend budget" = "支出預算";
 "The gateway's base URL, such as https://ai-router.example.cn." = "閘道的基礎位址，例如 https://ai-router.example.cn。";
-"Used where the gateway reports no limit of its own." = "僅在閘道本身沒有回報限額時使用。";
+"Used where the account has no subscription of its own." = "僅在帳戶本身沒有訂閱時使用。";
 "Add the gateway's address in Settings." = "請在設定中輸入閘道位址。";
-"This gateway reports no limit. Set a spend budget in Settings to draw a ring." = "此閘道沒有回報限額。在設定中輸入支出預算即可繪製環圈。";
+"Add the gateway's access token in Settings." = "請在設定中輸入存取權杖。";
+"That access token was refused. Check it in Settings." = "此存取權杖被拒絕，請在設定中檢查。";
+"Access token" = "存取權杖";
+"From the console's Security page — not the sk- key. Stored encrypted on this Mac." = "來自閘道主控台的「安全性」頁面——不是 sk- 開頭的金鑰。加密儲存在本機。";

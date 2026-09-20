@@ -27,8 +27,10 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     case xiaomiMiMo
     /// A self-hosted New API gateway. The first provider here that is
     /// **somebody's own site** rather than a vendor's: the address is a
-    /// setting, there is no CLI of its own to detect, and the key is the one
-    /// the reader already uses in their editor. See `NewAPIUsageService`.
+    /// setting, there is no CLI of its own to detect, and the credential is a
+    /// token that site's own console issues — not the `sk-…` key the reader's
+    /// editor holds, which cannot read the account at all. See
+    /// `NewAPIUsageService`.
     case newAPI
 
     var id: String { rawValue }
@@ -280,12 +282,14 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     /// the shorter list that also hands over `creditRemaining`, which is a
     /// number and a currency.
     ///
-    /// **New API is not on it although it does report money.** What its reply
-    /// carries is mostly what has been *spent*; money left exists only where
-    /// the gateway states a ceiling of its own, and a key issued without one
-    /// has nothing to warn below. A "warn me below" line that can never fire
-    /// is worse than no line at all.
-    var reportsSpendableBalance: Bool { [.deepSeek, .commandCode].contains(self) }
+    /// **New API is on it because the access token reads money *left*.** Its
+    /// two account routes both report a remaining figure — a subscription's
+    /// `amount_total − amount_used`, a wallet's `quota` — so there is a number
+    /// to warn below, and it is money spent on the gateway's own servers, which
+    /// is exactly the case the line exists for. (The `sk-…` key this provider
+    /// used to read with reported a *spend*, and a spend has nothing to warn
+    /// below; the token is what changed that.)
+    var reportsSpendableBalance: Bool { [.deepSeek, .commandCode, .newAPI].contains(self) }
 
     /// Whether the pasted credential is a **pair** rather than one token.
     ///

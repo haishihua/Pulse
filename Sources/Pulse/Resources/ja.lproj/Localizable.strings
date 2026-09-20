@@ -310,6 +310,7 @@
 "Every two hours. Updates are offered, never installed on their own." = "2 時間ごとに確認します。案内するだけで、勝手にインストールはしません。";
 "Couldn't reach the update feed." = "更新フィードに接続できませんでした。";
 "Uses the key you entered." = "入力したキーを使います。";
+"Uses the access token you entered." = "入力したアクセストークンを使います。";
 "API key" = "API キー";
 "Session cookie" = "セッション Cookie";
 "Read from browser" = "ブラウザから読み取る";
@@ -611,12 +612,16 @@
 "Uses a browser session you import in Settings. Importing may ask for browser Keychain access." = "設定で読み込んだブラウザのログインセッションを使います。読み込み時にブラウザのキーチェーンへのアクセスを求めることがあります。";
 "Uses the GitHub login you connect in Settings. No Keychain prompt." = "設定で連携した GitHub のログインを使います。キーチェーンの確認はありません。";
 "Uses only the API key you enter in Settings. No Keychain prompt." = "設定で入力した API キーだけを使います。キーチェーンの確認はありません。";
+"Uses the access token you enter in Settings. No Keychain prompt." = "設定で入力したアクセストークンだけを使います。キーチェーンの確認はありません。";
 
 /* New API gateway */
 "Address" = "アドレス";
 "Spent so far" = "これまでの消費額";
 "Spend budget" = "支出予算";
 "The gateway's base URL, such as https://ai-router.example.cn." = "ゲートウェイのベース URL（例: https://ai-router.example.cn）。";
-"Used where the gateway reports no limit of its own." = "ゲートウェイ自身が上限を報告しない場合にのみ使われます。";
+"Used where the account has no subscription of its own." = "アカウント自身にサブスクリプションがない場合にのみ使われます。";
 "Add the gateway's address in Settings." = "設定でゲートウェイのアドレスを入力してください。";
-"This gateway reports no limit. Set a spend budget in Settings to draw a ring." = "このゲートウェイは上限を報告していません。設定で支出予算を入力するとリングを表示できます。";
+"Add the gateway's access token in Settings." = "設定でゲートウェイのアクセストークンを入力してください。";
+"That access token was refused. Check it in Settings." = "このアクセストークンは拒否されました。設定で確認してください。";
+"Access token" = "アクセストークン";
+"From the console's Security page — not the sk- key. Stored encrypted on this Mac." = "コンソールの「セキュリティ」ページで発行されるもので、sk- キーではありません。この Mac に暗号化して保存されます。";

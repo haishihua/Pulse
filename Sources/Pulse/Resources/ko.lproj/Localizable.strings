@@ -310,6 +310,7 @@
 "Every two hours. Updates are offered, never installed on their own." = "두 시간마다 확인합니다. 알려 주기만 하고 임의로 설치하지 않습니다.";
 "Couldn't reach the update feed." = "업데이트 피드에 접속하지 못했습니다.";
 "Uses the key you entered." = "입력한 키를 씁니다.";
+"Uses the access token you entered." = "입력한 액세스 토큰을 씁니다.";
 "API key" = "API 키";
 "Session cookie" = "세션 쿠키";
 "Read from browser" = "브라우저에서 읽기";
@@ -611,12 +612,16 @@
 "Uses a browser session you import in Settings. Importing may ask for browser Keychain access." = "설정에서 가져온 브라우저 로그인 세션을 사용합니다. 가져올 때 브라우저의 키체인 접근 권한을 요청할 수 있습니다.";
 "Uses the GitHub login you connect in Settings. No Keychain prompt." = "설정에서 연결한 GitHub 로그인을 사용합니다. 키체인 확인 창은 표시되지 않습니다.";
 "Uses only the API key you enter in Settings. No Keychain prompt." = "설정에 입력한 API 키만 사용합니다. 키체인 확인 창은 표시되지 않습니다.";
+"Uses the access token you enter in Settings. No Keychain prompt." = "설정에 입력한 액세스 토큰만 사용합니다. 키체인 확인 창은 표시되지 않습니다.";
 
 /* New API gateway */
 "Address" = "주소";
 "Spent so far" = "지금까지 사용한 금액";
 "Spend budget" = "지출 예산";
 "The gateway's base URL, such as https://ai-router.example.cn." = "게이트웨이 기본 주소입니다(예: https://ai-router.example.cn).";
-"Used where the gateway reports no limit of its own." = "게이트웨이가 자체 한도를 보고하지 않을 때만 사용됩니다.";
+"Used where the account has no subscription of its own." = "계정에 자체 구독이 없을 때만 사용됩니다.";
 "Add the gateway's address in Settings." = "설정에서 게이트웨이 주소를 입력하세요.";
-"This gateway reports no limit. Set a spend budget in Settings to draw a ring." = "이 게이트웨이는 한도를 보고하지 않습니다. 설정에서 지출 예산을 입력하면 링을 표시할 수 있습니다.";
+"Add the gateway's access token in Settings." = "설정에서 게이트웨이 액세스 토큰을 입력하세요.";
+"That access token was refused. Check it in Settings." = "이 액세스 토큰이 거부되었습니다. 설정에서 확인하세요.";
+"Access token" = "액세스 토큰";
+"From the console's Security page — not the sk- key. Stored encrypted on this Mac." = "콘솔의 '보안' 페이지에서 발급되는 것이며 sk- 키가 아닙니다. 이 Mac에 암호화되어 저장됩니다.";

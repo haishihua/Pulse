@@ -422,7 +422,7 @@ final class UsageStore {
         // rather than inside the service — which stays free of storage
         // concerns, exactly like the two DeepSeek figures beside it.
         let gateway = NewAPIUsageService(
-            enteredKey: apiKeys[.newAPI],
+            accessToken: apiKeys[.newAPI],
             address: settings.newAPIAddress,
             budget: settings.newAPIBudget
         )
@@ -679,7 +679,7 @@ final class UsageStore {
             currency: settings.deepSeekCurrency
         )
         let gateway = NewAPIUsageService(
-            enteredKey: key,
+            accessToken: key,
             address: settings.newAPIAddress,
             budget: settings.newAPIBudget
         )

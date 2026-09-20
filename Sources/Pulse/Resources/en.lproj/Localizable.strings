@@ -310,6 +310,7 @@
 "Every two hours. Updates are offered, never installed on their own." = "Every two hours. Updates are offered, never installed on their own.";
 "Couldn't reach the update feed." = "Couldn't reach the update feed.";
 "Uses the key you entered." = "Uses the key you entered.";
+"Uses the access token you entered." = "Uses the access token you entered.";
 "API key" = "API key";
 "Session cookie" = "Session cookie";
 "Read from browser" = "Read from browser";
@@ -611,12 +612,16 @@
 "Uses a browser session you import in Settings. Importing may ask for browser Keychain access." = "Uses a browser session you import in Settings. Importing may ask for browser Keychain access.";
 "Uses the GitHub login you connect in Settings. No Keychain prompt." = "Uses the GitHub login you connect in Settings. No Keychain prompt.";
 "Uses only the API key you enter in Settings. No Keychain prompt." = "Uses only the API key you enter in Settings. No Keychain prompt.";
+"Uses the access token you enter in Settings. No Keychain prompt." = "Uses the access token you enter in Settings. No Keychain prompt.";
 
 /* New API gateway */
 "Address" = "Address";
 "Spent so far" = "Spent so far";
 "Spend budget" = "Spend budget";
 "The gateway's base URL, such as https://ai-router.example.cn." = "The gateway's base URL, such as https://ai-router.example.cn.";
-"Used where the gateway reports no limit of its own." = "Used where the gateway reports no limit of its own.";
+"Used where the account has no subscription of its own." = "Used where the account has no subscription of its own.";
 "Add the gateway's address in Settings." = "Add the gateway's address in Settings.";
-"This gateway reports no limit. Set a spend budget in Settings to draw a ring." = "This gateway reports no limit. Set a spend budget in Settings to draw a ring.";
+"Add the gateway's access token in Settings." = "Add the gateway's access token in Settings.";
+"That access token was refused. Check it in Settings." = "That access token was refused. Check it in Settings.";
+"Access token" = "Access token";
+"From the console's Security page — not the sk- key. Stored encrypted on this Mac." = "From the console's Security page — not the sk- key. Stored encrypted on this Mac.";

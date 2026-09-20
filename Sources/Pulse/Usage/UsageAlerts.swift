@@ -388,7 +388,7 @@ struct AlertMemory: Codable, Sendable, Equatable {
              .cursorLoginExpired, .grokLoginExpired, .signedOut, .apiKeyRefused,
              .ollamaSessionExpired, .ollamaPageChanged, .xiaomiSessionExpired,
              .unreachable, .unreadableReply, .rateLimited, .serverError,
-             .codexServerFailed:
+             .codexServerFailed, .gatewayTokenRefused:
             .failure
 
         // The provider replied. "No limits on this plan" and "your Cursor plan
@@ -404,10 +404,7 @@ struct AlertMemory: Codable, Sendable, Equatable {
              .zaiNoCodingPlan,
              // And the same again for Xiaomi: the session worked and the
              // account simply has no plan on it.
-             .xiaomiNoCodingPlan,
-             // And for a gateway whose key works and reports a spend with no
-             // ceiling over it: an answer, with nothing to measure it against.
-             .gatewayNoAllowance:
+             .xiaomiNoCodingPlan:
             .answered
 
         // Never set up, never signed in, or an app that simply is not
@@ -424,9 +421,10 @@ struct AlertMemory: Codable, Sendable, Equatable {
              // the same standing as a CLI that is not there: true until
              // somebody does something, and not an outage to announce.
              .devinAppMissing, .devinPlanUnread, .devinOrganizationMissing,
-             // A gateway that has not been set up at all. True until somebody
-             // types an address, and not an outage to announce.
-             .gatewayAddressMissing:
+             // A gateway that has not been set up at all — no address, or no
+             // access token. True until somebody fills the pane in, and not an
+             // outage to announce.
+             .gatewayAddressMissing, .gatewayTokenMissing:
             .neutral
         }
     }

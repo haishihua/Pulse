@@ -102,9 +102,14 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
         case (.desktopApp, .volcengine):
             // Never shown: `options(for:)` offers it to Claude Code alone.
             .localized("Use the endpoint when possible, the other route when not.")
+        case (_, .newAPI):
+            // Never shown either — one route, and it reads the account with the
+            // console's access token rather than with the `sk-…` key an editor
+            // holds, which cannot see any of it.
+            .localized("Uses the access token you entered.")
         case (_, .openCodeGo), (_, .kimiCode), (_, .zai), (_, .glmCoding),
              (_, .minimax), (_, .minimaxCN), (_, .copilot), (_, .commandCode),
-             (_, .deepSeek), (_, .newAPI):
+             (_, .deepSeek):
             // Never shown either — one route, and it needs a key.
             .localized("Uses the key you entered.")
         case (.endpoint, .devin):

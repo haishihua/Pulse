@@ -132,10 +132,10 @@ struct UsageDetailCard: View {
             // reports money and no limits *by design*, and the money is then
             // the whole reading — so it is what the card says.
             if usage.windows.isEmpty, let balance = usage.creditBalance {
-                // Titled from the reading rather than fixed: every provider
-                // before New API with money and no window was reporting what
-                // is left, and a spend under the word "balance" reads as an
-                // account still holding the money it has burned.
+                // Titled from the reading rather than fixed: what every
+                // provider here reports is money **left**, and a spend under
+                // the word "balance" would read as an account still holding
+                // the money it has burned. See `ProviderUsage.creditIsSpent`.
                 ValueRow(
                     title: usage.creditIsSpent
                         ? String.localized("Spent so far")

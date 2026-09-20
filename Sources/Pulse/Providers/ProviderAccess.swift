@@ -29,7 +29,9 @@ extension Provider {
             .localized("Uses a browser session you import in Settings. Importing may ask for browser Keychain access.")
         case .copilot:
             .localized("Uses the GitHub login you connect in Settings. No Keychain prompt.")
-        case .kimiCode, .zai, .minimax, .minimaxCN, .deepSeek, .newAPI:
+        case .newAPI:
+            .localized("Uses the access token you enter in Settings. No Keychain prompt.")
+        case .kimiCode, .zai, .minimax, .minimaxCN, .deepSeek:
             .localized("Uses only the API key you enter in Settings. No Keychain prompt.")
         }
     }

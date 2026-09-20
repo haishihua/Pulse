@@ -35,7 +35,7 @@ Accounts the stored rail does not mention are appended **in name order**, not in
 | `.deepSeek` | DeepSeek | `deepseek` | Pasted key | no | one, documented | no | none |
 | `.devin` | Devin | `devin` | Browser `localStorage` (no keychain); optional pasted `token org` | no | saved plan / endpoint | no | the app's `state.vscdb` exists |
 | `.xiaomiMiMo` | Xiaomi Coding Plan | `xiaomimimo` | Browser session for `platform.xiaomimimo.com`, or a pasted `Cookie:` header | no | one, named | no | none |
-| `.newAPI` | New API | `newapi` | Pasted key, plus the site's address | no | one, named | no | none — nothing on a Mac names a gateway |
+| `.newAPI` | New API | `newapi` | Pasted **access token**, plus the site's address | no | one, named | no | none — nothing on a Mac names a gateway |
 
 Per-provider pages: [claude-code.md](claude-code.md), [codex.md](codex.md), [antigravity.md](antigravity.md), [cursor.md](cursor.md), [opencode-go.md](opencode-go.md), [kimi-code.md](kimi-code.md), [ollama-cloud.md](ollama-cloud.md), [zai.md](zai.md), [minimax.md](minimax.md), [copilot.md](copilot.md), [grok.md](grok.md), [grok-bot.md](grok-bot.md), [volcengine.md](volcengine.md), [command-code.md](command-code.md), [deepseek.md](deepseek.md), [devin.md](devin.md), [xiaomi-coding-plan.md](xiaomi-coding-plan.md), [new-api.md](new-api.md).
 

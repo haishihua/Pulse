@@ -120,13 +120,14 @@ final class AppSettings {
         }
     }
 
-    /// What the reader expects this gateway key to be allowed to spend.
+    /// What the reader expects this gateway account to be allowed to spend.
     ///
-    /// Used **only** where the gateway reports no ceiling of its own — a key
-    /// issued with `unlimited_quota` has none, and a percentage against
-    /// `100000000` is a ring pinned at zero for ever. Nil then leaves the row
-    /// with no denominator, which the card says out loud instead of drawing.
-    /// See `NewAPIUsageService.windows`.
+    /// Used **only** where the account has no subscription of its own: a
+    /// subscription states its own total and its own reset, and a figure the
+    /// reader typed never overrides the gateway's. A wallet on its own states a
+    /// balance and no ceiling at all, which is where this comes in — and nil
+    /// leaves that case with a balance and no ring rather than a ring measuring
+    /// against nothing. See `NewAPIUsageService.budgetWindow`.
     var newAPIBudget: Double? {
         didSet {
             guard newAPIBudget != oldValue else { return }

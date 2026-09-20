@@ -84,7 +84,7 @@ One window, `kind: .monthly`, `id` `xiaomi.plan`.
 
 `windowSeconds` is thirty days and **`reportsLength` is false**. The platform states when the period ends and never how long it is, and a billing month is not a fixed number of seconds — so the length is a sort key, the window-clock arc is not drawn, and the forecast does not divide by it. Copilot's calendar month is carried the same way; see the `windowSeconds` section of [README.md](README.md).
 
-The balance rides along as `creditBalance`, a formatted string. **Not `creditRemaining`**, which is the number-and-currency pair the "warn below" line is built on: there is no allowance to compare a prepaid balance against here, so `reportsSpendableBalance` stays false and no low-balance alert is offered. DeepSeek and Command Code are the two that do offer one, and both of them have a denominator of some kind.
+The balance rides along as `creditBalance`, a formatted string. **Not `creditRemaining`**, which is the number-and-currency pair the "warn below" line is built on: there is no allowance to compare a prepaid balance against here, so `reportsSpendableBalance` stays false and no low-balance alert is offered. DeepSeek, Command Code and New API are the three that do offer one, and all of them report money left rather than money spent.
 
 ## Unconfirmed
 

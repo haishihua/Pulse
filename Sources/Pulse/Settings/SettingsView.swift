@@ -1157,9 +1157,9 @@ struct SettingsView: View {
                  .grok, .grokBot, .volcengine, .commandCode, .deepSeek, .devin,
                  .newAPI:
                 // Not session-based: `readSession` sends those to
-                // `readBrowserStorage` before it gets here. New API takes a key
-                // the reader pastes; the address beside it is a setting, not a
-                // cookie.
+                // `readBrowserStorage` before it gets here. New API takes an
+                // access token the reader pastes; the address beside it is a
+                // setting, not a cookie.
                 return
             }
 
@@ -1916,13 +1916,14 @@ struct SettingsView: View {
         }
     }
 
-    /// Blank clears it. Where the gateway states a ceiling of its own this is
-    /// never used; where it states none, this is the only denominator there
-    /// is — so a blank here is the one case that draws no ring at all.
+    /// Blank clears it. A subscription states its own total and its own reset,
+    /// so this is never used while one is running; where the account has none,
+    /// the wallet's balance is the only figure there is and this is the only
+    /// denominator — so a blank here is the one case that draws no ring at all.
     private var gatewayBudgetRow: some View {
         SettingsRow(
             String.localized("Spend budget"),
-            subtitle: String.localized("Used where the gateway reports no limit of its own.")
+            subtitle: String.localized("Used where the account has no subscription of its own.")
         ) {
             HStack(spacing: 8) {
                 TextField("", text: $gatewayBudget)
@@ -2058,6 +2059,12 @@ struct SettingsView: View {
             .localized("From commandcode.ai. Optional — Pulse can use the login Command Code saved. Stored encrypted on this Mac.")
         case .deepSeek:
             .localized("From platform.deepseek.com. Stored encrypted on this Mac.")
+        // The gateway's own access token, which is a different thing from the
+        // `sk-…` key its chat routes take and the only one its account routes
+        // answer to. Said here because the field looks exactly like every
+        // other provider's key field.
+        case .newAPI:
+            .localized("From the console's Security page — not the sk- key. Stored encrypted on this Mac.")
         // Two values in one field, because the quota path is scoped by an
         // organisation and nothing on this Mac carries one. Optional, like
         // Volcengine's: without it Pulse reads the plan Devin's own app saved.
@@ -2188,7 +2195,14 @@ struct SettingsView: View {
                             // page that issues one. There isn't one.
                             : account.provider == .devin
                                 ? String.localized("Token and organization")
-                                : String.localized("API key"),
+                                // New API's is the console's access token. The
+                                // `sk-…` key the reader's editor holds answers
+                                // 401 to every route the account is read by, so
+                                // calling the field an API key is the one name
+                                // that cannot work.
+                                : account.provider == .newAPI
+                                    ? String.localized("Access token")
+                                    : String.localized("API key"),
                     subtitle: Self.keySubtitle(for: account.provider)
                 ) {
                     HStack(spacing: 8) {
@@ -2694,9 +2708,11 @@ struct SettingsView: View {
             if let credit = usage.creditBalance {
                 SettingsRowDivider()
                 // The same distinction the card draws, and it has to be drawn
-                // in both places: New API with no ceiling of its own reports a
-                // spend, and calling that a balance reads as money still in
-                // the account. See `ProviderUsage.creditIsSpent`.
+                // in both places: a figure that is a **spend** may not be
+                // labelled a balance, which reads as money still in the
+                // account. Nothing reports one today — see
+                // `ProviderUsage.creditIsSpent` — but a stored reading may
+                // still carry one.
                 SettingsRow(String.localized(usage.creditIsSpent ? "Spent so far" : "Credit balance")) {
                     Text(credit)
                         .font(.system(size: 13))

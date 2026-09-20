@@ -310,6 +310,7 @@
 "Every two hours. Updates are offered, never installed on their own." = "每两小时检查一次。只提示，不会自己装。";
 "Couldn't reach the update feed." = "连不上更新源。";
 "Uses the key you entered." = "使用你填入的 key。";
+"Uses the access token you entered." = "使用你填入的访问令牌。";
 "API key" = "API key";
 "Session cookie" = "登录 Cookie";
 "Read from browser" = "从浏览器读取";
@@ -611,12 +612,16 @@
 "Uses a browser session you import in Settings. Importing may ask for browser Keychain access." = "使用你在设置里导入的浏览器登录会话。导入时可能请求浏览器的钥匙串授权。";
 "Uses the GitHub login you connect in Settings. No Keychain prompt." = "使用你在设置里连接的 GitHub 登录。不弹钥匙串。";
 "Uses only the API key you enter in Settings. No Keychain prompt." = "只使用你在设置里填入的 API key。不弹钥匙串。";
+"Uses the access token you enter in Settings. No Keychain prompt." = "只使用你在设置里填入的访问令牌。不弹钥匙串。";
 
 /* New API gateway */
 "Address" = "地址";
 "Spent so far" = "已花费";
 "Spend budget" = "支出预算";
 "The gateway's base URL, such as https://ai-router.example.cn." = "网关的基础地址，例如 https://ai-router.example.cn。";
-"Used where the gateway reports no limit of its own." = "仅在网关自身没有报告限额时使用。";
+"Used where the account has no subscription of its own." = "仅在账户自身没有订阅时使用。";
 "Add the gateway's address in Settings." = "请在设置里填入网关地址。";
-"This gateway reports no limit. Set a spend budget in Settings to draw a ring." = "该网关没有报告限额。在设置里填入支出预算即可绘制环图。";
+"Add the gateway's access token in Settings." = "请在设置里填入访问令牌。";
+"That access token was refused. Check it in Settings." = "该访问令牌被拒绝，请在设置里检查。";
+"Access token" = "访问令牌";
+"From the console's Security page — not the sk- key. Stored encrypted on this Mac." = "来自网关控制台的「安全」页面——不是 sk- 开头的 key。加密存储在本机。";

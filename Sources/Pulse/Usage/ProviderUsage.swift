@@ -483,15 +483,22 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
         /// and the same distinction `zaiNoCodingPlan` exists for.
         case xiaomiNoCodingPlan
         /// A New API gateway with no address entered. **Not the same as a
-        /// missing key**: the software is self-hosted, so there is no default
-        /// to fall back on, nothing to look up, and nothing to guess.
+        /// missing credential**: the software is self-hosted, so there is no
+        /// default to fall back on, nothing to look up, and nothing to guess.
         case gatewayAddressMissing
-        /// A New API gateway that reports what has been spent and no ceiling
-        /// to measure it against. **A complete answer rather than a fault** —
-        /// the same distinction `zaiNoCodingPlan` and `xiaomiNoCodingPlan`
-        /// exist for — and the one figure that would fix it is named in the
-        /// message.
-        case gatewayNoAllowance
+        /// A New API gateway with no access token entered.
+        ///
+        /// **The `sk-…` key is not this and cannot stand in for it.** Measured
+        /// against a live gateway: the key that answers its chat routes with a
+        /// completion answers `/api/user/self` and `/api/subscription/self`
+        /// with `401`, because those are the console's own account routes and
+        /// want the token the console issues. Said as its own case so the
+        /// message names the right thing rather than sending somebody to
+        /// re-paste a key that already works everywhere else.
+        case gatewayTokenMissing
+        /// There is a token, and the gateway's dashboard auth refused it —
+        /// wrong, revoked, or issued by a different site.
+        case gatewayTokenRefused
         /// No key has been entered for a provider that needs one.
         case apiKeyMissing
         /// There is a key, and the service refused it.
@@ -536,14 +543,11 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
             case .devinAppMissing: .localized("Devin isn't installed.")
             case .devinPlanUnread: .localized("Open Devin and sign in, so it can record your plan.")
             case .devinOrganizationMissing: .localized("Add your Devin organization after the token, separated by a space.")
-            // Self-hosted software: the address is typed into the same pane as
-            // the key, and a fresh install has nothing in either field.
+            // Self-hosted software: both fields are typed into the same pane,
+            // and a fresh install has nothing in either of them.
             case .gatewayAddressMissing: .localized("Add the gateway's address in Settings.")
-            // Says what the gateway does report, then the one figure that would
-            // give the ring a denominator.
-            case .gatewayNoAllowance: .localized(
-                "This gateway reports no limit. Set a spend budget in Settings to draw a ring."
-            )
+            case .gatewayTokenMissing: .localized("Add the gateway's access token in Settings.")
+            case .gatewayTokenRefused: .localized("That access token was refused. Check it in Settings.")
             case .apiKeyMissing: .localized("Add an API key in Settings.")
             case .apiKeyRefused: .localized("That key was refused. Check it in Settings.")
             case .unreachable: .localized("The service didn't respond.")
@@ -579,11 +583,14 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
     let creditBalance: String?
     /// Whether that figure is money **gone** rather than money left.
     ///
-    /// Every provider that reported money before New API reported what is
-    /// left, which is what the card's "Credit balance" row means. A gateway
-    /// with no ceiling of its own has only a spend to report, and putting that
-    /// under the word "balance" reads as an account still holding the money it
-    /// has actually burned. Defaulted, so every call site that predates this
+    /// Every provider reports what is **left**, which is what the card's
+    /// "Credit balance" row means, and nothing sets this true today: the one
+    /// provider that reported a spend — a New API gateway read with an `sk-…`
+    /// key — reports a balance now that it reads the account with the console's
+    /// access token. It stays because it is *persisted*: a reading banked by an
+    /// older build still says "Spent so far" until a live fetch replaces it,
+    /// and relabelling a stored figure would call somebody's spend their
+    /// balance. Defaulted, so every call site that predates this
     /// keeps saying "balance" — which is what all of them mean.
     var creditIsSpent: Bool = false
     /// The same figure as a number, where there is one to compare.

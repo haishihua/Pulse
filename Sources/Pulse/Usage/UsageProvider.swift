@@ -25,6 +25,11 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     case deepSeek
     case devin
     case xiaomiMiMo
+    /// A self-hosted New API gateway. The first provider here that is
+    /// **somebody's own site** rather than a vendor's: the address is a
+    /// setting, there is no CLI of its own to detect, and the key is the one
+    /// the reader already uses in their editor. See `NewAPIUsageService`.
+    case newAPI
 
     var id: String { rawValue }
 
@@ -86,6 +91,12 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         // denominator and the thing the buyer signed up for. "Xiaomi MiMo"
         // would name the platform and leave the two products sharing a row.
         case .xiaomiMiMo: "Xiaomi Coding Plan"
+        // The gateway software, not one of the products behind it. What the
+        // key is spent across is whoever's models the site proxies, so naming
+        // the row after any one of them would name the one part of the chain
+        // the ring is not about — and "New API" is what the thing calls
+        // itself. See `NewAPIUsageService`.
+        case .newAPI: "New API"
         }
     }
 
@@ -128,6 +139,10 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         // does not use; at ring size it reads as a shape rather than as words,
         // which is the trade for being the real mark.
         case .xiaomiMiMo: "xiaomimimo"
+        // The software's own mark rather than any brand it fronts: a gateway
+        // is somebody else's site, and the model vendors it proxies each have
+        // a mark of their own that this row is not about.
+        case .newAPI: "newapi"
         }
     }
 
@@ -150,7 +165,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         // which is true today and better than a column of zeroes.
         case .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
              .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .grok, .grokBot,
-             .volcengine, .commandCode, .deepSeek, .devin, .xiaomiMiMo: false
+             .volcengine, .commandCode, .deepSeek, .devin, .xiaomiMiMo, .newAPI: false
         }
     }
 
@@ -197,7 +212,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         case .claudeCode, .codex, .volcengine, .devin: true
         case .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
              .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .grok, .grokBot,
-             .commandCode, .deepSeek, .xiaomiMiMo: false
+             .commandCode, .deepSeek, .xiaomiMiMo, .newAPI: false
         }
     }
 
@@ -233,7 +248,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         // about elsewhere, so there is nothing here to state.
         case .claudeCode, .codex, .openCodeGo, .kimiCode, .ollamaCloud,
              .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .volcengine,
-             .commandCode, .deepSeek, .devin, .xiaomiMiMo:
+             .commandCode, .deepSeek, .devin, .xiaomiMiMo, .newAPI:
             nil
         }
     }
@@ -245,7 +260,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     /// anyone on the plan who doesn't run the CLI on this Mac.
     var usesAPIKey: Bool {
         [.openCodeGo, .kimiCode, .ollamaCloud, .zai, .glmCoding, .minimax, .minimaxCN, .volcengine,
-         .commandCode, .deepSeek, .devin, .xiaomiMiMo].contains(self)
+         .commandCode, .deepSeek, .devin, .xiaomiMiMo, .newAPI].contains(self)
     }
 
     /// Whether this Mac can see the thing this provider is billing for.
@@ -264,6 +279,12 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     /// a display string and Codex's is sometimes the word "Unlimited". This is
     /// the shorter list that also hands over `creditRemaining`, which is a
     /// number and a currency.
+    ///
+    /// **New API is not on it although it does report money.** What its reply
+    /// carries is mostly what has been *spent*; money left exists only where
+    /// the gateway states a ceiling of its own, and a key issued without one
+    /// has nothing to warn below. A "warn me below" line that can never fire
+    /// is worse than no line at all.
     var reportsSpendableBalance: Bool { [.deepSeek, .commandCode].contains(self) }
 
     /// Whether the pasted credential is a **pair** rather than one token.

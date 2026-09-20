@@ -261,7 +261,8 @@ struct FloatingUsagePanelView: View {
             observedAt: usage.observedAt,
             state: usage.state,
             plan: usage.plan,
-            creditBalance: usage.creditBalance
+            creditBalance: usage.creditBalance,
+            creditIsSpent: usage.creditIsSpent
         )
     }
 

@@ -33,13 +33,20 @@ enum ConnectionRemedy: Equatable {
         case .devinAppMissing, .devinPlanUnread: return .openApp("Devin")
         case .notSignedIn, .signedOut: return .signIn
         case .apiKeyMissing, .apiKeyRefused, .devinOrganizationMissing: return .editCredential
+        // The address is typed into the same pane as the key, so the same
+        // remedy — open it and fill the blank in — covers both. Worth its own
+        // button rather than none: a fresh install has nothing in this field
+        // and no way to guess what belongs in it.
+        case .gatewayAddressMissing: return .editCredential
         case .ollamaSessionMissing, .ollamaSessionExpired,
              .xiaomiSessionMissing, .xiaomiSessionExpired: return .readBrowser
         case .claudeDesktopKeyRefused, .unreachable, .rateLimited, .serverError,
              .codexServerFailed: return .retry
+        // Setup help opens this provider's own page, and it is the page that
+        // describes the two settings the message names.
         case .codexNotInstalled, .volcengineCLIMissing, .noLimitsReported,
              .grokBotNotIncluded, .zaiNoCodingPlan, .xiaomiNoCodingPlan,
-             .ollamaPageChanged, .unreadableReply:
+             .ollamaPageChanged, .unreadableReply, .gatewayNoAllowance:
             return .help
         }
     }
@@ -76,6 +83,7 @@ enum ConnectionRemedy: Equatable {
         case .commandCode: "command-code"
         case .deepSeek: "deepseek"
         case .devin: "devin"
+        case .newAPI: "new-api"
         }
         return URL(string: "https://github.com/qunqin24/Pulse/blob/main/Docs/providers/\(page).md")!
     }

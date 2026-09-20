@@ -39,17 +39,19 @@ enum BotMarkTint {
         // Xiaomi's orange. The MiMo console is black-on-white, but the parent
         // brand's colour is the one a reader recognises on a rail.
         case .xiaomiMiMo: BotMarkPalette.rgb(0xFF6900)
+        // New API's own mark, like the rest of these, is a black-or-white
+        // glyph — the relay is somebody's own site and has no colour to take.
         case .codex, .cursor, .openCodeGo, .ollamaCloud, .zai,
-             .copilot, .grok, .grokBot, .commandCode, .devin:
+             .copilot, .grok, .grokBot, .commandCode, .devin, .newAPI:
             nil
         }
     }
 
     /// Colours for a rail, in the order its rings are drawn.
     ///
-    /// Ten of eighteen providers are monochrome by design and carry no colour
-    /// at all. Ten white bots in a row is a rail you cannot read — the mark is
-    /// the thing that says *which* ring this is, and identical is the one
+    /// Eleven of twenty providers are monochrome by design and carry no colour
+    /// at all. Eleven white bots in a row is a rail you cannot read — the mark
+    /// is the thing that says *which* ring this is, and identical is the one
     /// thing it must not be — so those are dealt a colour of Pulse's own.
     ///
     /// **Dealt across the rail, not fixed per provider.** Three fixed schemes
@@ -78,11 +80,12 @@ enum BotMarkTint {
 
         // Walking the wheel with a stride coprime to its size visits every
         // colour exactly once, so the rail cannot repeat one. Which stride and
-        // where it starts are the only freedom there is, and there are forty
-        // of those — few enough to simply try them all and keep the one whose
-        // worst neighbouring pair is furthest apart. Greedy choice was tried
-        // first and ran out of colours near the end of a long rail, which is
-        // exactly where it then had no choice but to put two blues together.
+        // where it starts are the only freedom there is, and there are
+        // forty-four of those — few enough to simply try them all and keep the
+        // one whose worst neighbouring pair is furthest apart. Greedy choice
+        // was tried first and ran out of colours near the end of a long rail,
+        // which is exactly where it then had no choice but to put two blues
+        // together.
         var best: (score: Double, stride: Int, rotation: Int)?
         for stride in [1, 3, 7, 9] {
             for rotation in 0..<paletteSize {
@@ -141,9 +144,13 @@ enum BotMarkTint {
         brand(for: provider) == nil
     }
 
-    private static let paletteSize = 10
+    /// Eleven, because that is how many providers carry no brand colour and a
+    /// rail of eleven white bots needs eleven different colours. The strides
+    /// below must be coprime with it, which eleven being prime makes easy to
+    /// see: none of them shares a factor with it.
+    private static let paletteSize = 11
 
-    /// The wheel, solved once: ten hues 36° apart, each at the same
+    /// The wheel, solved once: eleven hues evenly spaced, each at the same
     /// luminance. `dealt(at:)` is a bisection, and a rail is dealt on every
     /// pass of the dock's body.
     private static let wheel: [Color] = (0..<paletteSize).map { dealt(at: $0) }
@@ -175,8 +182,11 @@ enum BotMarkTint {
     /// solved for the same perceived luminance instead.
     private static func dealt(at index: Int) -> Color {
         // 27° is the offset that keeps the wheel as a whole furthest from the
-        // hues the brand colours already hold.
-        let hue = Double((27 + 36 * (index % paletteSize)) % 360)
+        // hues the brand colours already hold. The step is derived from the
+        // wheel's size, so a slot added later re-spaces the whole ring instead
+        // of leaving one gap with the rest bunched opposite it.
+        let hue = (27 + 360 / Double(paletteSize) * Double(index % paletteSize))
+            .truncatingRemainder(dividingBy: 360)
         return levelled(hue: hue, saturation: 0.68, target: 0.62)
     }
 

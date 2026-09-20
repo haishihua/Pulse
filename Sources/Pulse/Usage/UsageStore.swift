@@ -418,6 +418,14 @@ final class UsageStore {
             browser: settings.sessionBrowser(for: AccountKey(.devin))
         )
         let devinSource = settings.source(for: AccountKey(.devin))
+        // The address and the budget are the reader's, so they are read here
+        // rather than inside the service — which stays free of storage
+        // concerns, exactly like the two DeepSeek figures beside it.
+        let gateway = NewAPIUsageService(
+            enteredKey: apiKeys[.newAPI],
+            address: settings.newAPIAddress,
+            budget: settings.newAPIBudget
+        )
         let deepSeek = DeepSeekUsageService(
             enteredKey: apiKeys[.deepSeek],
             basis: settings.deepSeekBasis,
@@ -514,8 +522,11 @@ final class UsageStore {
             let (rawMiniMax, rawMiniMaxCN) = await (minimaxUsage, minimaxCNUsage)
             let (rawCopilot, rawGrok, rawGrokBot) = await (copilotUsage, grokUsage, grokBotUsage)
             let (rawVolcengine, rawCommandCode) = await (volcengineUsage, commandCodeUsage)
+            async let newAPIUsage = wanted.contains(.newAPI)
+                ? await gateway.fetch()
+                : ProviderUsage.unavailable(.newAPI, reason: .loading)
             let (rawDeepSeek, rawDevin) = await (deepSeekUsage, devinUsage)
-            let rawXiaomi = await xiaomiUsage
+            let (rawNewAPI, rawXiaomi) = await (newAPIUsage, xiaomiUsage)
 
             // **The disowning is checked before anything is written, not just
             // before the readings are handed to the panel.** `reconciled`
@@ -555,6 +566,7 @@ final class UsageStore {
                 (.commandCode, rawCommandCode),
                 (.deepSeek, rawDeepSeek),
                 (.devin, rawDevin),
+                (.newAPI, rawNewAPI),
                 (.xiaomiMiMo, rawXiaomi),
             ] where wanted.contains(provider) {
                 results.append(BatchResult(
@@ -666,6 +678,11 @@ final class UsageStore {
             budget: settings.deepSeekBudget,
             currency: settings.deepSeekCurrency
         )
+        let gateway = NewAPIUsageService(
+            enteredKey: key,
+            address: settings.newAPIAddress,
+            budget: settings.newAPIBudget
+        )
 
         Task { [codex, claudeCode, antigravity, cursor, grok, grokBot] in
             let raw: ProviderUsage
@@ -707,6 +724,8 @@ final class UsageStore {
                 raw = await devinAccount.fetch(source: source)
             case .xiaomiMiMo:
                 raw = await xiaomi.fetch()
+            case .newAPI:
+                raw = await gateway.fetch()
             }
             }
 
@@ -779,7 +798,7 @@ final class UsageStore {
         // Nothing else can be signed in to, so nothing else gets here.
         case .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
              .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .volcengine,
-             .commandCode, .deepSeek, .devin, .xiaomiMiMo:
+             .commandCode, .deepSeek, .devin, .xiaomiMiMo, .newAPI:
             .unavailable(account, reason: .loading)
         }
     }

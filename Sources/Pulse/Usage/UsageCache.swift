@@ -46,6 +46,11 @@ actor UsageCache {
         let observedAt: Date
         let plan: String?
         let creditBalance: String?
+        /// Whether that money is what is left or what is gone. Optional, and
+        /// **nil means a balance**: entries written before this field existed
+        /// came from providers that only ever reported what was left. See
+        /// `ProviderUsage.creditIsSpent`.
+        var creditIsSpent: Bool?
         /// The balance as a number, so a restored reading can draw the short
         /// form on the rail rather than falling back to the long one
         /// `CreditAmount.railText` exists to avoid. Optional: entries written
@@ -197,6 +202,7 @@ actor UsageCache {
             observedAt: usage.observedAt ?? Date(),
             plan: usage.plan,
             creditBalance: usage.creditBalance,
+            creditIsSpent: usage.creditIsSpent,
             creditRemaining: usage.creditRemaining.map {
                 CreditAmountStored(amount: $0.amount, currency: $0.currency)
             },
@@ -231,6 +237,7 @@ actor UsageCache {
         restored.creditRemaining = stored.creditRemaining.map {
             .init(amount: $0.amount, currency: $0.currency)
         }
+        restored.creditIsSpent = stored.creditIsSpent ?? false
         restored.origin = stored.origin
         restored.sourceScope = stored.scope
         restored.isCached = true

@@ -482,6 +482,16 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
         /// buys tokens by the yuan instead. A complete answer, not a fault,
         /// and the same distinction `zaiNoCodingPlan` exists for.
         case xiaomiNoCodingPlan
+        /// A New API gateway with no address entered. **Not the same as a
+        /// missing key**: the software is self-hosted, so there is no default
+        /// to fall back on, nothing to look up, and nothing to guess.
+        case gatewayAddressMissing
+        /// A New API gateway that reports what has been spent and no ceiling
+        /// to measure it against. **A complete answer rather than a fault** —
+        /// the same distinction `zaiNoCodingPlan` and `xiaomiNoCodingPlan`
+        /// exist for — and the one figure that would fix it is named in the
+        /// message.
+        case gatewayNoAllowance
         /// No key has been entered for a provider that needs one.
         case apiKeyMissing
         /// There is a key, and the service refused it.
@@ -526,6 +536,14 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
             case .devinAppMissing: .localized("Devin isn't installed.")
             case .devinPlanUnread: .localized("Open Devin and sign in, so it can record your plan.")
             case .devinOrganizationMissing: .localized("Add your Devin organization after the token, separated by a space.")
+            // Self-hosted software: the address is typed into the same pane as
+            // the key, and a fresh install has nothing in either field.
+            case .gatewayAddressMissing: .localized("Add the gateway's address in Settings.")
+            // Says what the gateway does report, then the one figure that would
+            // give the ring a denominator.
+            case .gatewayNoAllowance: .localized(
+                "This gateway reports no limit. Set a spend budget in Settings to draw a ring."
+            )
             case .apiKeyMissing: .localized("Add an API key in Settings.")
             case .apiKeyRefused: .localized("That key was refused. Check it in Settings.")
             case .unreachable: .localized("The service didn't respond.")
@@ -559,6 +577,15 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
     /// Remaining credit, when the provider reports it. Formatted for display,
     /// which is all most of the app wants.
     let creditBalance: String?
+    /// Whether that figure is money **gone** rather than money left.
+    ///
+    /// Every provider that reported money before New API reported what is
+    /// left, which is what the card's "Credit balance" row means. A gateway
+    /// with no ceiling of its own has only a spend to report, and putting that
+    /// under the word "balance" reads as an account still holding the money it
+    /// has actually burned. Defaulted, so every call site that predates this
+    /// keeps saying "balance" — which is what all of them mean.
+    var creditIsSpent: Bool = false
     /// The same figure as a number, where there is one to compare.
     ///
     /// **Separate from `creditBalance` on purpose.** That is a display string

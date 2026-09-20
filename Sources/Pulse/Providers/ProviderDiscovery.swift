@@ -33,8 +33,11 @@ extension Provider {
             return ["Devin", "Windsurf"].map {
                 local("Library/Application Support/\($0)/User/globalStorage/state.vscdb")
             }
+        // Self-hosted software. A gateway is somebody else's site with an
+        // address only its own users know, so there is nothing on this Mac to
+        // look for and nothing to offer: the address is a setting.
         case .kimiCode, .ollamaCloud, .zai, .minimax, .minimaxCN, .copilot,
-             .volcengine, .deepSeek, .xiaomiMiMo:
+             .volcengine, .deepSeek, .xiaomiMiMo, .newAPI:
             return []
         }
     }

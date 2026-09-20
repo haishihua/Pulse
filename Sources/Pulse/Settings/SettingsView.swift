@@ -45,6 +45,11 @@ struct SettingsView: View {
     /// The budget being typed, kept as text so a half-entered number is not
     /// read as a denominator on every keystroke.
     @State private var deepSeekBudget = ""
+    /// The gateway's address and the budget being typed, kept as text for the
+    /// same reason as the figure above: a half-typed URL is not an address,
+    /// and a half-typed number is not a denominator.
+    @State private var gatewayAddress = ""
+    @State private var gatewayBudget = ""
     /// Manual proxy fields are committed as one valid endpoint rather than on
     /// every keystroke.
     @State private var proxyHost = ""
@@ -1149,9 +1154,12 @@ struct SettingsView: View {
                 keep = { try? XiaomiMiMoCookie.normalize($0) }
             case .claudeCode, .codex, .antigravity, .cursor, .openCodeGo,
                  .kimiCode, .zai, .glmCoding, .minimax, .minimaxCN, .copilot,
-                 .grok, .grokBot, .volcengine, .commandCode, .deepSeek, .devin:
+                 .grok, .grokBot, .volcengine, .commandCode, .deepSeek, .devin,
+                 .newAPI:
                 // Not session-based: `readSession` sends those to
-                // `readBrowserStorage` before it gets here.
+                // `readBrowserStorage` before it gets here. New API takes a key
+                // the reader pastes; the address beside it is a setting, not a
+                // cookie.
                 return
             }
 
@@ -1480,6 +1488,10 @@ struct SettingsView: View {
             // beside a ring that is measuring against it.
             if shown == .deepSeek {
                 deepSeekBudget = settings.deepSeekBudget.map { String($0) } ?? ""
+            }
+            if shown == .newAPI {
+                gatewayAddress = settings.newAPIAddress ?? ""
+                gatewayBudget = Self.text(settings.newAPIBudget)
             }
             if shown.reportsSpendableBalance {
                 lowBalance = settings.lowBalanceAlert(for: AccountKey(shown)).map { String($0) } ?? ""
@@ -1885,6 +1897,59 @@ struct SettingsView: View {
         deepSeekBudget = Self.text(settings.deepSeekBudget)
     }
 
+    /// New API's site. Self-hosted software, so this is the one thing about
+    /// the provider that cannot be known in advance — and nothing is requested
+    /// until it is filled in.
+    private var gatewayAddressRow: some View {
+        SettingsRow(
+            String.localized("Address"),
+            subtitle: String.localized("The gateway's base URL, such as https://ai-router.example.cn.")
+        ) {
+            HStack(spacing: 8) {
+                TextField("", text: $gatewayAddress)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: SettingsLayout.controlWidth - 70)
+                    .onSubmit { saveGatewayAddress() }
+
+                Button(String.localized("Save")) { saveGatewayAddress() }
+            }
+        }
+    }
+
+    /// Blank clears it. Where the gateway states a ceiling of its own this is
+    /// never used; where it states none, this is the only denominator there
+    /// is — so a blank here is the one case that draws no ring at all.
+    private var gatewayBudgetRow: some View {
+        SettingsRow(
+            String.localized("Spend budget"),
+            subtitle: String.localized("Used where the gateway reports no limit of its own.")
+        ) {
+            HStack(spacing: 8) {
+                TextField("", text: $gatewayBudget)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: SettingsLayout.controlWidth - 70)
+                    .onSubmit { saveGatewayBudget() }
+
+                Button(String.localized("Save")) { saveGatewayBudget() }
+            }
+        }
+    }
+
+    /// Typed as it stands rather than through `NewAPIUsageService.baseURL`,
+    /// which is the reader's own service's question and not this pane's: what
+    /// is stored is what they typed, and the one place that decides whether it
+    /// names a site is the fetch.
+    private func saveGatewayAddress() {
+        let typed = gatewayAddress.trimmingCharacters(in: .whitespacesAndNewlines)
+        settings.newAPIAddress = typed.isEmpty ? nil : typed
+        gatewayAddress = settings.newAPIAddress ?? ""
+    }
+
+    private func saveGatewayBudget() {
+        settings.newAPIBudget = Self.money(gatewayBudget)
+        gatewayBudget = Self.text(settings.newAPIBudget)
+    }
+
     /// A figure typed into a settings field, or nil for anything that is not
     /// one.
     ///
@@ -2212,6 +2277,17 @@ struct SettingsView: View {
                     SettingsRowDivider()
                     deepSeekBudgetRow
                 }
+            }
+
+            // New API: the site, then the figure the ring measures against
+            // where that site reports no ceiling of its own. Neither is a
+            // credential — the key field above holds that — but both are the
+            // reader's, and the ring cannot be drawn without one of them.
+            if account.provider == .newAPI {
+                SettingsRowDivider()
+                gatewayAddressRow
+                SettingsRowDivider()
+                gatewayBudgetRow
             }
 
             // The status line has to be registered before it can report
@@ -2617,7 +2693,11 @@ struct SettingsView: View {
 
             if let credit = usage.creditBalance {
                 SettingsRowDivider()
-                SettingsRow(String.localized("Credit balance")) {
+                // The same distinction the card draws, and it has to be drawn
+                // in both places: New API with no ceiling of its own reports a
+                // spend, and calling that a balance reads as money still in
+                // the account. See `ProviderUsage.creditIsSpent`.
+                SettingsRow(String.localized(usage.creditIsSpent ? "Spent so far" : "Credit balance")) {
                     Text(credit)
                         .font(.system(size: 13))
                         .foregroundStyle(.secondary)

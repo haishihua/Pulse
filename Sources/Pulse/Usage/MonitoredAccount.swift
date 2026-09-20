@@ -160,7 +160,7 @@ extension Provider {
         // editor behind it. Grok Bot needs nothing but the token.
         case .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
              .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .volcengine,
-             .commandCode, .deepSeek, .devin, .xiaomiMiMo: false
+             .commandCode, .deepSeek, .devin, .xiaomiMiMo, .newAPI: false
         }
     }
 }

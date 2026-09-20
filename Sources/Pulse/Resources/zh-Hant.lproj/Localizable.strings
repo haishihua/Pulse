@@ -611,3 +611,12 @@
 "Uses a browser session you import in Settings. Importing may ask for browser Keychain access." = "使用你在設定中匯入的瀏覽器登入工作階段。匯入時可能要求瀏覽器的鑰匙圈存取權限。";
 "Uses the GitHub login you connect in Settings. No Keychain prompt." = "使用你在設定中連結的 GitHub 登入。不會出現鑰匙圈提示。";
 "Uses only the API key you enter in Settings. No Keychain prompt." = "只使用你在設定中輸入的 API 金鑰。不會出現鑰匙圈提示。";
+
+/* New API gateway */
+"Address" = "位址";
+"Spent so far" = "已花費";
+"Spend budget" = "支出預算";
+"The gateway's base URL, such as https://ai-router.example.cn." = "閘道的基礎位址，例如 https://ai-router.example.cn。";
+"Used where the gateway reports no limit of its own." = "僅在閘道本身沒有回報限額時使用。";
+"Add the gateway's address in Settings." = "請在設定中輸入閘道位址。";
+"This gateway reports no limit. Set a spend budget in Settings to draw a ring." = "此閘道沒有回報限額。在設定中輸入支出預算即可繪製環圈。";

@@ -404,7 +404,10 @@ struct AlertMemory: Codable, Sendable, Equatable {
              .zaiNoCodingPlan,
              // And the same again for Xiaomi: the session worked and the
              // account simply has no plan on it.
-             .xiaomiNoCodingPlan:
+             .xiaomiNoCodingPlan,
+             // And for a gateway whose key works and reports a spend with no
+             // ceiling over it: an answer, with nothing to measure it against.
+             .gatewayNoAllowance:
             .answered
 
         // Never set up, never signed in, or an app that simply is not
@@ -420,7 +423,10 @@ struct AlertMemory: Codable, Sendable, Equatable {
              // An app that was never installed or never signed in, which is
              // the same standing as a CLI that is not there: true until
              // somebody does something, and not an outage to announce.
-             .devinAppMissing, .devinPlanUnread, .devinOrganizationMissing:
+             .devinAppMissing, .devinPlanUnread, .devinOrganizationMissing,
+             // A gateway that has not been set up at all. True until somebody
+             // types an address, and not an outage to announce.
+             .gatewayAddressMissing:
             .neutral
         }
     }

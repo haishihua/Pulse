@@ -104,6 +104,37 @@ final class AppSettings {
         }
     }
 
+    /// The site a New API gateway answers on.
+    ///
+    /// Self-hosted software, so this is the reader's to type: there is no
+    /// address to default to, nothing on this Mac that names a gateway, and no
+    /// list to pick from. Scalars rather than the per-account dictionaries
+    /// beside them for the same reason DeepSeek's are — this provider has no
+    /// second account. Nil leaves the provider saying exactly that rather than
+    /// requesting a guess.
+    var newAPIAddress: String? {
+        didSet {
+            guard newAPIAddress != oldValue else { return }
+            UserDefaults.standard.set(newAPIAddress, forKey: Key.newAPIAddress)
+            onChange?()
+        }
+    }
+
+    /// What the reader expects this gateway key to be allowed to spend.
+    ///
+    /// Used **only** where the gateway reports no ceiling of its own — a key
+    /// issued with `unlimited_quota` has none, and a percentage against
+    /// `100000000` is a ring pinned at zero for ever. Nil then leaves the row
+    /// with no denominator, which the card says out loud instead of drawing.
+    /// See `NewAPIUsageService.windows`.
+    var newAPIBudget: Double? {
+        didSet {
+            guard newAPIBudget != oldValue else { return }
+            UserDefaults.standard.set(newAPIBudget, forKey: Key.newAPIBudget)
+            onChange?()
+        }
+    }
+
     /// Warn when a prepaid balance falls below this much, per account.
     ///
     /// Empty is off, which is how it ships — the same rule every other alert
@@ -824,6 +855,8 @@ final class AppSettings {
         deepSeekBasis: DeepSeekBasis = .default,
         deepSeekBudget: Double? = nil,
         deepSeekCurrency: String? = nil,
+        newAPIAddress: String? = nil,
+        newAPIBudget: Double? = nil,
         lowBalanceAlerts: [String: Double] = [:],
         enabledAccounts: Set<String> = Set(Provider.allCases.map(\.rawValue)),
         extraAccounts: [ExtraAccount] = [],
@@ -866,6 +899,8 @@ final class AppSettings {
         self.deepSeekBasis = deepSeekBasis
         self.deepSeekBudget = deepSeekBudget
         self.deepSeekCurrency = deepSeekCurrency
+        self.newAPIAddress = newAPIAddress
+        self.newAPIBudget = newAPIBudget
         self.lowBalanceAlerts = lowBalanceAlerts
         self.enabledAccounts = enabledAccounts
         self.extraAccounts = extraAccounts
@@ -1124,6 +1159,8 @@ final class AppSettings {
                 .flatMap(DeepSeekBasis.init(rawValue:)) ?? .default,
             deepSeekBudget: defaults.object(forKey: Key.deepSeekBudget) as? Double,
             deepSeekCurrency: defaults.string(forKey: Key.deepSeekCurrency),
+            newAPIAddress: defaults.string(forKey: Key.newAPIAddress),
+            newAPIBudget: defaults.object(forKey: Key.newAPIBudget) as? Double,
             lowBalanceAlerts: defaults.dictionary(forKey: Key.lowBalanceAlerts) as? [String: Double] ?? [:],
             enabledAccounts: selection.enabledAccounts,
             extraAccounts: extras,
@@ -1244,6 +1281,10 @@ final class AppSettings {
         static let deepSeekBasis = "settings.deepSeekBasis"
         static let deepSeekBudget = "settings.deepSeekBudget"
         static let deepSeekCurrency = "settings.deepSeekCurrency"
+        /// The site a New API gateway answers on, and the figure its ring
+        /// measures against where that gateway states no ceiling of its own.
+        static let newAPIAddress = "settings.newAPIAddress"
+        static let newAPIBudget = "settings.newAPIBudget"
         static let lowBalanceAlerts = "settings.lowBalanceAlerts"
         static let language = "settings.language"
         static let pinnedWindows = "settings.pinnedWindows"

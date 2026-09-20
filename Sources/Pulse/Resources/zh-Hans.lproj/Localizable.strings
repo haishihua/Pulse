@@ -611,3 +611,12 @@
 "Uses a browser session you import in Settings. Importing may ask for browser Keychain access." = "使用你在设置里导入的浏览器登录会话。导入时可能请求浏览器的钥匙串授权。";
 "Uses the GitHub login you connect in Settings. No Keychain prompt." = "使用你在设置里连接的 GitHub 登录。不弹钥匙串。";
 "Uses only the API key you enter in Settings. No Keychain prompt." = "只使用你在设置里填入的 API key。不弹钥匙串。";
+
+/* New API gateway */
+"Address" = "地址";
+"Spent so far" = "已花费";
+"Spend budget" = "支出预算";
+"The gateway's base URL, such as https://ai-router.example.cn." = "网关的基础地址，例如 https://ai-router.example.cn。";
+"Used where the gateway reports no limit of its own." = "仅在网关自身没有报告限额时使用。";
+"Add the gateway's address in Settings." = "请在设置里填入网关地址。";
+"This gateway reports no limit. Set a spend budget in Settings to draw a ring." = "该网关没有报告限额。在设置里填入支出预算即可绘制环图。";
